@@ -1,12 +1,15 @@
 package vendingmachine.controller;
 
-import java.util.List;
+import java.util.Map;
+import vendingmachine.domain.Coin;
 import vendingmachine.domain.Item;
 import vendingmachine.domain.Machine;
 import vendingmachine.dto.request.InputMoneyRequest;
 import vendingmachine.dto.request.ItemNameToBuyRequest;
 import vendingmachine.dto.request.ItemsRequest;
 import vendingmachine.dto.request.MachineMoneyRequest;
+import vendingmachine.dto.response.ChangeCoinsResponse;
+import vendingmachine.dto.response.MachineCoinsResponse;
 import vendingmachine.view.InputView;
 import vendingmachine.view.OutputView;
 import vendingmachine.view.util.InputUtil;
@@ -22,9 +25,27 @@ public class VendingMachineController {
 
     public void run() {
         Machine machine = readMachineMoney();
-        List<Item> items = readItems();
+        printMachineCoins(machine.getCoins());
+
+        Map<Item, Integer> items = readItems();
+        machine.setItems(items);
+
         int inputMoney = readInputMoney();
-        String itemNameToBuy = readItemNameToBuy();
+
+        while (inputMoney > 0) {
+            if (machine.allItemsSoldOut() || inputMoney < machine.getMinimumPrice()) {
+                break;
+            }
+
+            printInputMoney(inputMoney);
+            Item itemNameToBuy = readItemNameToBuy(machine);
+            int price = machine.buyItem(itemNameToBuy);
+            inputMoney -= price;
+        }
+
+        Map<Coin, Integer> changeCoins = machine.returnChangeCoins(inputMoney);
+        printInputMoney(inputMoney);
+        printChangeCoins(ChangeCoinsResponse.from(changeCoins));
     }
 
     private Machine readMachineMoney() {
@@ -35,7 +56,7 @@ public class VendingMachineController {
         });
     }
 
-    private List<Item> readItems() {
+    private Map<Item, Integer> readItems() {
         return InputUtil.retryOnException(() -> {
             ItemsRequest dto = inputView.readItems();
             return dto.toItems();
@@ -49,10 +70,23 @@ public class VendingMachineController {
         });
     }
 
-    private String readItemNameToBuy() {
+    private Item readItemNameToBuy(Machine machine) {
         return InputUtil.retryOnException(() -> {
             ItemNameToBuyRequest dto = inputView.readItemNameToBuy();
-            return dto.toString();
+            return machine.getItemOrThrow(dto.toString());
         });
+    }
+
+    private void printMachineCoins(Map<Coin, Integer> coins) {
+        MachineCoinsResponse dto = MachineCoinsResponse.from(coins);
+        outputView.printMachineCoins(dto);
+    }
+
+    private void printInputMoney(int inputMoney) {
+        outputView.printInputMoney(inputMoney);
+    }
+
+    private void printChangeCoins(ChangeCoinsResponse dto) {
+        outputView.printChangeCoins(dto);
     }
 }

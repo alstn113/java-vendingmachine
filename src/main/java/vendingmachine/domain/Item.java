@@ -3,7 +3,7 @@ package vendingmachine.domain;
 import vendingmachine.exception.ErrorMessage;
 import vendingmachine.exception.InvalidInputException;
 
-public record Item(String name, int price, int quantity) {
+public record Item(String name, int price) {
     private static final int MINIMUM_PRICE = 100;
     private static final int PRICE_DIVISIBLE_BY = 10;
 

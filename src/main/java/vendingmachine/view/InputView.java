@@ -28,7 +28,6 @@ public class InputView {
     }
 
     public ItemNameToBuyRequest readItemNameToBuy() {
-        System.out.println();
         System.out.println("구매할 상품명을 입력해 주세요.");
         String input = Console.readLine();
         return new ItemNameToBuyRequest(input);
