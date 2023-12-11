@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import vendingmachine.domain.picker.NumberPicker;
+import vendingmachine.domain.picker.RandomNumberPicker;
 
 public class Machine {
     private final Map<Coin, Integer> coins = new EnumMap<>(Coin.class);
@@ -15,6 +16,10 @@ public class Machine {
         this.numberPicker = numberPicker;
         initCoins();
         generateCoins(money);
+    }
+
+    public Machine(int money) {
+        this(money, new RandomNumberPicker());
     }
 
     private void initCoins() {

@@ -14,18 +14,21 @@ public class InputView {
     }
 
     public ItemsRequest readItems() {
+        System.out.println();
         System.out.println("상품명과 가격, 수량을 입력해 주세요.");
         String input = Console.readLine();
         return new ItemsRequest(input);
     }
 
     public InputMoneyRequest readInputMoney() {
+        System.out.println();
         System.out.println("투입 금액을 입력해 주세요.");
         String input = Console.readLine();
         return new InputMoneyRequest(input);
     }
 
     public ItemNameToBuyRequest readItemNameToBuy() {
+        System.out.println();
         System.out.println("구매할 상품명을 입력해 주세요.");
         String input = Console.readLine();
         return new ItemNameToBuyRequest(input);
