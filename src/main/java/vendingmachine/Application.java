@@ -1,14 +1,14 @@
 package vendingmachine;
 
 import vendingmachine.controller.VendingMachineController;
-import vendingmachine.view.console.ConsoleInputView;
-import vendingmachine.view.console.ConsoleOutputView;
+import vendingmachine.view.InputView;
+import vendingmachine.view.OutputView;
 
 public class Application {
     public static void main(String[] args) {
         new VendingMachineController(
-                new ConsoleInputView(),
-                new ConsoleOutputView()
+                new InputView(),
+                new OutputView()
         ).run();
     }
 }
