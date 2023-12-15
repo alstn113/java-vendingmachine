@@ -21,6 +21,7 @@ public record ProductsRequest(String input) {
             List<String> productFormats = InputUtil.parseToList(input, SEMICOLON);
 
             for (String productFormat : productFormats) {
+                productFormat = productFormat.substring(1, productFormat.length() - 1);
                 List<String> productInfo = InputUtil.parseToList(productFormat, COMMA);
                 if (productInfo.size() != 3) {
                     throw new InvalidInputException(ErrorMessage.INVALID_PRODUCT_FORMAT);

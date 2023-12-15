@@ -4,6 +4,7 @@ package vendingmachine.controller;
 import java.util.Map;
 import vendingmachine.domain.Machine;
 import vendingmachine.domain.Product;
+import vendingmachine.dto.request.InputMoneyRequest;
 import vendingmachine.dto.request.MachineMoneyRequest;
 import vendingmachine.dto.request.ProductsRequest;
 import vendingmachine.dto.response.MachineMoneyResponse;
@@ -22,9 +23,16 @@ public class MachineController {
 
     public void run() {
         Machine machine = new Machine();
+
         int money = readMachineMoney();
         machine.putMoney(money);
+
         outputView.printMachineMoney(MachineMoneyResponse.from(machine.getCoins()));
+
+        Map<String, Product> products = products();
+        machine.putProducts(products);
+
+        int inputMoney = readInputMoney();
     }
 
     private int readMachineMoney() {
@@ -38,6 +46,13 @@ public class MachineController {
         return InputUtil.retryOnException(() -> {
             ProductsRequest dto = inputView.readProducts();
             return dto.toProducts();
+        });
+    }
+
+    private int readInputMoney() {
+        return InputUtil.retryOnException(() -> {
+            InputMoneyRequest dto = inputView.readInputMoney();
+            return dto.toInt();
         });
     }
 }
