@@ -32,6 +32,9 @@ public record ProductsRequest(String input) {
                 int quantity = InputUtil.parseToInt(productInfo.get(2));
 
                 Product product = new Product(name, price, quantity);
+                if (products.containsKey(name)) {
+                    throw new InvalidInputException(ErrorMessage.DUPLICATED_PRODUCT);
+                }
                 products.put(name, product);
             }
 

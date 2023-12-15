@@ -6,8 +6,12 @@ import vendingmachine.domain.Machine;
 import vendingmachine.domain.Product;
 import vendingmachine.dto.request.InputMoneyRequest;
 import vendingmachine.dto.request.MachineMoneyRequest;
+import vendingmachine.dto.request.ProductToBuyRequest;
 import vendingmachine.dto.request.ProductsRequest;
 import vendingmachine.dto.response.MachineMoneyResponse;
+import vendingmachine.dto.response.MachineReturnResponse;
+import vendingmachine.exception.ErrorMessage;
+import vendingmachine.exception.InvalidInputException;
 import vendingmachine.view.InputView;
 import vendingmachine.view.OutputView;
 import vendingmachine.view.util.InputUtil;
@@ -33,6 +37,15 @@ public class MachineController {
         machine.putProducts(products);
 
         int inputMoney = readInputMoney();
+
+        while (machine.canBuy(inputMoney)) {
+            outputView.printInputMoney(inputMoney);
+            String productToBuy = readProductToBuy(machine, inputMoney);
+            inputMoney -= machine.buy(productToBuy);
+        }
+
+        outputView.printInputMoney(inputMoney);
+        outputView.printReturnChange(MachineReturnResponse.from(machine.returnChange(inputMoney)));
     }
 
     private int readMachineMoney() {
@@ -53,6 +66,17 @@ public class MachineController {
         return InputUtil.retryOnException(() -> {
             InputMoneyRequest dto = inputView.readInputMoney();
             return dto.toInt();
+        });
+    }
+
+    private String readProductToBuy(Machine machine, int inputMoney) {
+        return InputUtil.retryOnException(() -> {
+            ProductToBuyRequest dto = inputView.readProductToBuy();
+            String product = dto.toProduct(machine);
+            if (machine.getProductPrice(product) > inputMoney) {
+                throw new InvalidInputException(ErrorMessage.NOT_ENOUGH_MONEY);
+            }
+            return product;
         });
     }
 }

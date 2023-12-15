@@ -9,6 +9,9 @@ public enum ErrorMessage {
     INVALID_PRICE_UNIT("가격은 10원 단위여야 합니다."),
     INVALID_PRODUCT_FORMAT("상품 형식이 올바르지 않습니다."),
     INVALID_INPUT_MONEY("금액은 음수일 수 없습니다."),
+    PRODUCT_NOT_FOUND("상품을 찾을 수 없습니다."),
+    DUPLICATED_PRODUCT("중복된 상품이 존재합니다."),
+    NOT_ENOUGH_MONEY("금액이 부족합니다."),
     ;
 
     private final String message;
