@@ -6,10 +6,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class Machine {
-    private final Map<Coin, Integer> coins = new LinkedHashMap<>();
+    private final Map<Integer, Integer> coins = new LinkedHashMap<>();
 
     public Machine() {
         initMachine();
@@ -17,7 +16,7 @@ public class Machine {
 
     private void initMachine() {
         for (Coin coin : Coin.values()) {
-            coins.put(coin, 0);
+            coins.put(coin.getAmount(), 0);
         }
     }
 
@@ -26,20 +25,21 @@ public class Machine {
     }
 
     private void generateRandomCoin(int money) {
-        while (money > 0) {
-            List<Coin> coinList = Arrays.stream(Coin.values()).toList();
-            List<Integer> numbers = IntStream.range(0, coinList.size()).boxed().toList();
-            int num = Randoms.pickNumberInList(numbers);
-            Coin coin = coinList.get(num);
+        List<Integer> coinTypes = Arrays.stream(Coin.values())
+                .map(Coin::getAmount)
+                .toList();
 
-            if (money >= coin.getAmount()) {
-                money -= coin.getAmount();
+        while (money > 0) {
+            int coin = Randoms.pickNumberInList(coinTypes);
+
+            if (money >= coin) {
+                money -= coin;
                 coins.put(coin, coins.get(coin) + 1);
             }
         }
     }
 
-    public Map<Coin, Integer> getCoins() {
+    public Map<Integer, Integer> getCoins() {
         return Collections.unmodifiableMap(coins);
     }
 }
