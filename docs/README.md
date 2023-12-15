@@ -17,4 +17,4 @@
 - Coin 클래스를 활용해서 구현한다.
   - amount는 변경 불가능
 - Console의 readLine()을 이용해 사용자 입력을 받는다.
-- Random값은 Randoms의 pickNumberInList()를 이용한다.
+- Random값은 Randoms의 pickNumberInList()를 이용한다. 
