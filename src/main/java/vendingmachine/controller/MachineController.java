@@ -1,8 +1,11 @@
 package vendingmachine.controller;
 
 
+import java.util.Map;
 import vendingmachine.domain.Machine;
+import vendingmachine.domain.Product;
 import vendingmachine.dto.request.MachineMoneyRequest;
+import vendingmachine.dto.request.ProductsRequest;
 import vendingmachine.dto.response.MachineMoneyResponse;
 import vendingmachine.view.InputView;
 import vendingmachine.view.OutputView;
@@ -28,6 +31,13 @@ public class MachineController {
         return InputUtil.retryOnException(() -> {
             MachineMoneyRequest dto = inputView.readMachineMoney();
             return dto.toInt();
+        });
+    }
+
+    private Map<String, Product> products() {
+        return InputUtil.retryOnException(() -> {
+            ProductsRequest dto = inputView.readProducts();
+            return dto.toProducts();
         });
     }
 }
