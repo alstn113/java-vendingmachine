@@ -11,15 +11,18 @@ import java.util.stream.IntStream;
 public class Machine {
     private final Map<Coin, Integer> coins = new LinkedHashMap<>();
 
-    public Machine(int money) {
+    public Machine() {
         initMachine();
-        generateRandomCoin(money);
     }
 
     private void initMachine() {
         for (Coin coin : Coin.values()) {
             coins.put(coin, 0);
         }
+    }
+
+    public void putMoney(int money) {
+        generateRandomCoin(money);
     }
 
     private void generateRandomCoin(int money) {
