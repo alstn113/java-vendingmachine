@@ -3,6 +3,7 @@ package vendingmachine.controller;
 
 import vendingmachine.domain.Machine;
 import vendingmachine.dto.request.MachineMoneyRequest;
+import vendingmachine.dto.response.MachineMoneyResponse;
 import vendingmachine.view.InputView;
 import vendingmachine.view.OutputView;
 import vendingmachine.view.util.InputUtil;
@@ -20,6 +21,7 @@ public class MachineController {
         Machine machine = new Machine();
         int money = readMachineMoney();
         machine.putMoney(money);
+        outputView.printMachineMoney(MachineMoneyResponse.from(machine.getCoins()));
     }
 
     private int readMachineMoney() {
